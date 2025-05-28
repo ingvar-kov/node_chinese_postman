@@ -10,22 +10,25 @@ const PORT = process.env.PORT || 3000; //выбор порта из енв ил�
 
 app.use(cors()); //разрешение исп КОРС для всех запросов
 app.use(bodyParser.json());
-app.use(express.static('public'));
+app.use(express.static('public')); //Позволяет серверу на Express автоматически отдавать статические файлы (HTML, CSS, JS, изображения, шрифты и др.) из указанной папки (public в данном случае).
 
 const OPENROUTE_API_KEY = process.env.OPENROUTE_API_KEY;
 
 // Получение координат городов
 app.post('/api/geocode', async (req, res) => {
     try {
-        const { cities } = req.body;
-        
+        const { cities } = req.body; // Получаем массив городов из тела запроса
+
+        // Валидация входных данных
         if (!cities || !Array.isArray(cities)) {
             return res.status(400).json({ error: 'Invalid cities data' });
         }
 
-        const locations = [];
+        const locations = []; // Массив для результатов геокодирования
         
+        // Обрабатываем каждый город
         for (const city of cities) {
+             // Запрос к API openrouteservice для геокодирования
             const response = await axios.get(
                 `https://api.openrouteservice.org/geocode/search?api_key=${OPENROUTE_API_KEY}&text=${encodeURIComponent(city)}`,
                 {
@@ -34,13 +37,13 @@ app.post('/api/geocode', async (req, res) => {
                     }
                 }
             );
-            
+             // Если город не найден
             if (!response.data.features || response.data.features.length === 0) {
                 console.warn(`Город не найден: ${city}`);
                 continue;
             }
             
-            // Берем первый результат (наиболее релевантный)
+            // Берем первый результат, создаем объекк город с кооррдинатами (наиболее релевантный)
             const feature = response.data.features[0];
             locations.push({
                 name: city,
@@ -76,7 +79,7 @@ app.post('/api/matrix', async (req, res) => {
             locations: locations.map(loc => [loc.longitude, loc.latitude]),
             metrics: ['distance'],
             units: 'km',
-            sources: Array.from({ length: locations.length }, (_, i) => i),
+            sources: Array.from({ length: locations.length }, (_, i) => i), //указывает между какими точками считать расстояние
             destinations: Array.from({ length: locations.length }, (_, i) => i)
         }, {
             headers: {
