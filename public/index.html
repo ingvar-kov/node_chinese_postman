@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оптимальный маршрут между городами</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #cities-container {
+            margin-bottom: 20px;
+        }
+        .city-input {
+            margin-bottom: 10px;
+            display: flex;
+        }
+        .city-input input {
+            flex-grow: 1;
+            padding: 8px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        #graph-container {
+            margin-top: 20px;
+            height: 400px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Построение оптимального маршрута между городами</h1>
+    
+    <div id="cities-container">
+        <h3>Добавьте города:</h3>
+        <div class="city-input">
+            <input type="text" placeholder="Название города" class="city-name">
+            <button onclick="removeCity(this)">Удалить</button>
+        </div>
+    </div>
+    
+    <button onclick="addCity()">Добавить город</button>
+    <button onclick="calculateRoute()">Рассчитать маршрут</button>
+    
+    <div id="result"></div>
+    <div id="graph-container"></div>
+    
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
